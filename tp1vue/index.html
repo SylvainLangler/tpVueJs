@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html class="accueil" lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>tp1.html</title>
+		<style>
+		[v-clock]{
+			background-color:darkslategray;
+		}
+		</style>
+	</head>
+	<body>
+		<div id="app" v-clock>
+			<h2>Interpolation</h2>
+			<h3 v-text='titre'></h3>
+			<div v-html='baliseHTML'></div>
+			<div v-pre>{{ ça marche pas si on met v-pre }}</div>
+			<span v-once>Ceci ne changera jamais : {{ msgQuiNeChangePas }}</span>
+			<div>{{ messageAccueil }}</div>
+
+			<div v-if="visible">Ceci est visible</div>
+
+			<span v-for='(letter, index) in tabSnow' :key='index' :class="'toto_'+index">{{ letter }}</span>
+
+			
+		</div>
+
+			
+
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+		<script type="text/javascript">
+
+			var app = new Vue({
+				el: '#app',
+				data: {
+					titre: "tp1 vue",
+					baliseHTML: '<div style="color:red">Balise ajoutée avec v-html</div>',
+					msgQuiNeChangePas: 'ça changera pas',
+					messageAccueil: "Bonjour à tous",
+					visible: true,
+					tabSnow: ['s','n','o','w','w'],
+				}
+			});
+		</script>
+	</body>
+</html>
