@@ -12,7 +12,7 @@
 		</style>
 	</head>
 	<body>
-		<div id="app" v-clock>
+		<div id="app" v-cloak>
 			<h2>Interpolation</h2>
 			<h3 v-text='titre'></h3>
 			<div v-html='baliseHTML'></div>
@@ -23,7 +23,23 @@
 			<div v-if="visible">Ceci est visible</div>
 
 			<span v-for='(letter, index) in tabSnow' :key='index' :class="'toto_'+index">{{ letter }}</span>
+			<br>
 
+
+			<select name='select' v-model='selected'>
+				<option v-for='(obj,index) in options' :key='index' :value='obj.value'>{{ obj.text }}</option>
+			</select>
+			<span>Selected: {{ selected }}</span>
+
+			<div class="compteur">
+				<input type="number" v-model='max'>
+				<div>Cela va faire boom !</div>
+				<button @click='increase' >Appuyez Ici</button>
+				<div>Compteur: {{ count }}</div>
+				<div v-if='count >= max' class="boum">
+					BOUM
+				</div>
+			</div>
 			
 		</div>
 
@@ -42,8 +58,65 @@
 					messageAccueil: "Bonjour à tous",
 					visible: true,
 					tabSnow: ['s','n','o','w','w'],
+
+					// tp liaison
+					selected: 'A',
+					options: [
+						{ text: 'Un', value: 'A' },
+						{ text: 'Deux', value: 'B' },
+						{ text: 'Trois', value: 'C' }
+					],
+
+					//tp compteur
+					count: 0,
+					max: 10,
+
+				},
+				methods:{
+					increase: function(){
+						if(this.count < this.max){
+							this.count += 1;
+						}
+					}
 				}
 			});
 		</script>
 	</body>
+	<style>
+	.compteur{
+		margin-top:20px;
+		font-size:28px;
+		display:flex;
+		flex-direction:column;
+	}
+
+	.compteur button{
+		background-color: #145e92;
+		color: white;
+		padding: 10px;
+		border: 3px solid black;
+		cursor:pointer;
+	}
+
+	.boum{
+		background-color:red;
+		color:white;
+		padding:20px;
+		border:3px solid black;
+	}
+
+	.compteur .boum, .compteur button{
+		width:300px;
+		align-self:center;
+	}
+
+	.compteur div{
+		text-align:center;
+	}
+
+	.compteur input{
+		width:150px;
+		align-self: center;
+	}
+	</style>
 </html>
