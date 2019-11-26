@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html class="accueil" lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>tp1.html</title>
+		<style>
+		[v-clock]{
+			background-color:darkslategray;
+		}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+            <div class="todo">
+                <ul>
+                    <li v-for='(line, index) in todo' :key='index'>
+                        <input type="text" v-model="todo[index]" @keyup.enter='add(index)' :ref="'input_'+index">
+                        <button @click='deleteLine(index)'>Supprimer</button>
+                    </li>
+                </ul>
+                <button @click='add();maxC+=1'>Add todo</button>
+                <div>MaxA: {{ maxA }}</div>
+                <div>MaxB: {{ maxB }}</div>
+                <div>MaxC: {{ maxC }}</div>
+                debug: {{ todo }}
+            </div>
+        </div>
+
+			
+
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+		<script type="text/javascript">
+
+			var app = new Vue({
+				el: '#app',
+				data: {
+					// tp todo
+					todo:["yes"],
+                    max:1,
+                    maxC:1
+				},
+				methods:{
+                    add: function(i){
+                        this.todo.push('');
+                        console.log(app.$refs);
+                        if (i) {
+                            //console.log(app.$refs);
+                        }
+                    },
+                    deleteLine: function(index){
+                        if(index){
+                            this.todo.splice(index, 1);
+                        }
+                    }
+				},
+                computed:{
+                    maxA:{
+                        get(){
+                            let count = 0;
+                            for(let i = 0; i<this.todo.length; i++){
+                                if(this.todo[i] != ''){
+                                    count ++;
+                                }
+                            }
+                            return count;
+                        }
+                    }, 
+
+                    maxB:{
+                        get(){
+                            return this.todo.filter(line => line.length > 0).length;
+                        }
+                    }
+
+                },
+                watch:{
+                    add(value, oldValue){
+                        maxC = value;
+                    }
+                }
+			});
+
+
+            //:ref et $refs
+		</script>
+    </body>
+    <style>
+    li{
+        list-style:none;
+        margin:10px;
+    }
+    </style>

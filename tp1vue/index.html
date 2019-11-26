@@ -41,6 +41,12 @@
 				</div>
 			</div>
 			
+			<div>{{ test | majuscule1 }}</div>
+
+			<div class="todo">
+				<ul></ul>
+			</div>
+
 		</div>
 
 			
@@ -48,6 +54,16 @@
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 		<script type="text/javascript">
+
+			Vue.filter('majuscule1', function(value) {
+				if(!value){
+					return '';
+				}
+				else{
+					let first = value.charAt(0).toUpperCase();
+					return first+(value.substr(1).toLowerCase());
+				}
+			});
 
 			var app = new Vue({
 				el: '#app',
@@ -67,9 +83,13 @@
 						{ text: 'Trois', value: 'C' }
 					],
 
-					//tp compteur
+					// tp compteur
 					count: 0,
 					max: 10,
+					test: "bonjouR",
+
+					// tp todo
+					todo:[],
 
 				},
 				methods:{
@@ -78,7 +98,28 @@
 							this.count += 1;
 						}
 					}
-				}
+				},
+				/*filters:{
+					filtre: function(value){
+						if(!value){
+							return '';
+						}
+						else{
+							let first = value.charAt(0).toUpperCase();
+							return first+(value.substr(1).toLowerCase());
+						}
+					}
+				}*/
+				/* computed : {
+						multiplier: {
+							get(){
+
+							}
+							set(){
+
+							}
+						}
+				}*/
 			});
 		</script>
 	</body>
