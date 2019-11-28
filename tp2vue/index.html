@@ -16,7 +16,7 @@
             <div class="todo">
                 <ul>
                     <li v-for='(line, index) in todo' :key='index'>
-                        <input type="text" v-model="todo[index]" @keyup.enter='add(index)' :ref="'input_'+index">
+                        <input type="text" v-model="todo[index]" @keyup.enter='add(index)' :ref="'input_'+index" :id="'input_'+index">
                         <button @click='deleteLine(index)'>Supprimer</button>
                     </li>
                 </ul>
@@ -25,6 +25,16 @@
                 <div>MaxB: {{ maxB }}</div>
                 <div>MaxC: {{ maxC }}</div>
                 debug: {{ todo }}
+
+
+                <ul style="margin-top:50px;">
+                    <li v-for='(line, index) in todo_json' :key="todo_json[index]['id']">
+                        <input type="text" v-model="todo_json[index]['titre']">
+                        <button @click='deleteLine_json(index)'>Supprimer</button>
+                    </li>
+                </ul>
+                <button @click='add_json()'>Add todo</button>
+                debug: {{ todo_json }}
             </div>
         </div>
 
@@ -39,20 +49,49 @@
 				data: {
 					// tp todo
 					todo:["yes"],
+                    todo_json: null,
                     max:1,
-                    maxC:1
+                    maxC:1,
 				},
-				methods:{
-                    add: function(i){
+				methods:{   
+                    add: function(index = null){
                         this.todo.push('');
-                        console.log(app.$refs);
-                        if (i) {
-                            //console.log(app.$refs);
+                        if(index != null){
+                            /*for(i in app.$refs){
+                                console.log(app.$refs[i]);
+                            }*/
+                            setTimeout(function (){document.getElementById('input_'+(index+1)).focus();}, 1);
                         }
                     },
+
                     deleteLine: function(index){
-                        if(index){
+                        if(index != null){
                             this.todo.splice(index, 1);
+                        }
+                    },
+
+                    add_json: function(){
+                        
+                        let line = new Object();
+
+                        if(!this.todo_json){
+                            this.todo_json = [];
+                        }
+                        line['id'] = this.todo_json.length+1;
+                        line['titre'] = '';
+                        this.todo_json.push(line);
+                        
+                        
+                        
+                        // plus besoin car watch
+                        //localStorage.setItem("todo_json", JSON.stringify(this.todo_json));
+                    },
+
+                    deleteLine_json(index){
+                        if(index != null){
+                            this.todo_json.splice(index, 1);
+                            // plus besoin
+                            //localStorage.setItem("todo_json", JSON.stringify(this.todo_json));
                         }
                     }
 				},
@@ -71,14 +110,25 @@
 
                     maxB:{
                         get(){
-                            return this.todo.filter(line => line.length > 0).length;
+                            //return this.todo.filter(line => line.length > 0).length;
                         }
                     }
 
                 },
-                watch:{
+                mounted(){
+                    this.todo_json = JSON.parse(localStorage.getItem('todo_json'));
+                },
+                /*watch:{
                     add(value, oldValue){
                         maxC = value;
+                    },
+                }*/
+                watch: {
+                    todo_json: {
+                        handler: function() {
+                            localStorage.setItem("todo_json", JSON.stringify(this.todo_json));
+                        },
+                        deep : true
                     }
                 }
 			});
