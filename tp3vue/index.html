@@ -33,7 +33,7 @@
 				data: {
                     apiUri: "http://localhost:3000/",
                     todo: null,
-                    tab: null,
+                    lastId: null
 				},
 				methods:{   
                     add: function(){
@@ -43,41 +43,23 @@
                         if(!this.todo){
                             this.todo = [];
                         }
-                        this.get();
 
-                        //console.log(this.lastid);
-                        line['id'] = this.todo.length+1;
+                        line['id'] = this.lastId+1;
                         line['titre'] = '';
                         this.todo.push(line);
-                    },
-                    
-                    get: function(){
+                        
+                        // à mettre autrepart
                         fetch(this.apiUri + 'todo', {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
                             },
-                            body: ""
-                            });
-                            let reponse = null;
-                            fetch(this.apiUri + 'todo/', {
-                                method: 'GET',
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'application/json'
-                                }
-                                })
-                                .then((response) =>response.json())
-                                .then((data) => {
-                                    console.log(data);
-                                    this.tab = data;
-                                    //reponse = data[data.length-1]['id'];
+                            body: JSON.stringify({id: line['id'], titre:line['titre']})
+                        });
 
-                            });
-                            console.log(this.tab);
-                            //return reponse;
-                    }
+                        this.lastId +=1;
+                    },
 				},
                 computed:{
                 },
@@ -93,7 +75,7 @@
                         .then((response) =>response.json())
                         .then((data) => {
                             this.todo = data;
-
+                            this.lastId = this.todo[this.todo.length-1]['id'];
                     });
                 },
 
