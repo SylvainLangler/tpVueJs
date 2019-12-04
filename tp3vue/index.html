@@ -10,7 +10,16 @@
 	</head>
 	<body>
 		<div id="app"> 
-            {{ todo }}
+            <ul style="margin-top:50px;">
+                <li v-for='(line, index) in todo' :key="todo[index]['id']">
+                    <input type="text" v-model="todo[index]['titre']">
+                    <button @click='deleteLine(index)'>Supprimer</button>
+                </li>
+            </ul>
+            <button @click='add()'>Add todo</button>
+            debug: {{ todo }}
+            <br>
+            
         </div>
 
 			
@@ -24,12 +33,53 @@
 				data: {
                     apiUri: "http://localhost:3000/",
                     todo: null,
+                    tab: null,
 				},
 				methods:{   
+                    add: function(){
+
+                        let line = new Object();
+
+                        if(!this.todo){
+                            this.todo = [];
+                        }
+                        this.get();
+
+                        //console.log(this.lastid);
+                        line['id'] = this.todo.length+1;
+                        line['titre'] = '';
+                        this.todo.push(line);
+                    },
                     
+                    get: function(){
+                        fetch(this.apiUri + 'todo', {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: ""
+                            });
+                            let reponse = null;
+                            fetch(this.apiUri + 'todo/', {
+                                method: 'GET',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                }
+                                })
+                                .then((response) =>response.json())
+                                .then((data) => {
+                                    console.log(data);
+                                    this.tab = data;
+                                    //reponse = data[data.length-1]['id'];
+
+                            });
+                            console.log(this.tab);
+                            //return reponse;
+                    }
 				},
                 computed:{
-                    
                 },
 
                 mounted(){
