@@ -47,19 +47,29 @@
                         line['id'] = this.lastId+1;
                         line['titre'] = '';
                         this.todo.push(line);
+
+                        /*fetch(this.apiUri + 'todo', {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(line),
+                            });*/
                         
-                        // à mettre autrepart
-                        fetch(this.apiUri + 'todo', {
-                            method: 'POST',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({id: line['id'], titre:line['titre']})
-                        });
+                        // à mettre autrepart   
+                        /**/
 
                         this.lastId +=1;
                     },
+                    deleteLine: function(index){
+                        if(index != null){
+                            this.todo.splice(index, 1);
+                            fetch(this.apiUri + 'todo/' + index, {
+                                method: "DELETE",
+                            });
+                        }
+                    }
 				},
                 computed:{
                 },
@@ -80,7 +90,28 @@
                 },
 
                 watch:{
+                    todo: {
+                        handler: function() {
 
+                            for(let i = 1; i<this.todo.length; i++){
+                                
+                                fetch(this.apiUri + 'todo/' + i, {
+                                method: "DELETE",
+                                
+                            });
+                            }
+                            
+                            fetch(this.apiUri + 'todo', {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(this.todo)
+                            });
+                        },
+                        deep : true
+                    }
                 }
 			});
 
